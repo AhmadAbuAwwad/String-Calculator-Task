@@ -38,9 +38,9 @@ module StringUtils =
         addNumberStringToList result sb
         result |> List.ofSeq
 
-let validateInput (numArray: int list) =
-    if numArray.Length > 2 then
-        raise (InvalidInputException(ErrorMessages.INVALID_INPUT + "Number of inputs exceeds 2"))
+// let validateInput (numArray: int list) =
+//    if numArray.Length > 2 then
+//      raise (InvalidInputException(ErrorMessages.INVALID_INPUT + "Number of inputs exceeds 2"))
 
 
 let add (numbers: string) =
@@ -48,5 +48,6 @@ let add (numbers: string) =
     else
         let delimiters = set [',';]
         let numList = StringUtils.splitString numbers delimiters
-        validateInput numList
+//        validateInput numList
         numList |> List.sum
+printfn "%d" (add "1,2,3")

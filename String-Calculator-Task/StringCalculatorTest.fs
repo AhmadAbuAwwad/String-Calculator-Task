@@ -20,9 +20,13 @@ let ``testAdd_TwoNumbers_ReturnsSum`` () =
     Assert.AreEqual(300, add "100,200")
 
 [<Test>]
-let ``testAdd_MoreThanTwoNumbers_ThrowsInvalidInputException`` () =
-    let ex = Assert.Throws<InvalidInputException>(fun () -> add "1,2,3" |> ignore)
-    Assert.AreEqual(INVALID_INPUT + "Number of inputs exceeds 2", ex.Message)
+let ``testAdd_ManyNumbers_ReturnsSum`` () =
+    Assert.AreEqual(15, add "1,2,3,4,5")
+
+//[<Test>]
+//let ``testAdd_MoreThanTwoNumbers_ThrowsInvalidInputException`` () =
+//    let ex = Assert.Throws<InvalidInputException>(fun () -> add "1,2,3" |> ignore)
+//    Assert.AreEqual(INVALID_INPUT + "Number of inputs exceeds 2", ex.Message)
 
 [<Test>]
 let ``testAdd_EmptyNumberBetweenCommas_ThrowsInvalidInputException`` () =

@@ -29,7 +29,7 @@ let ``testAdd_ManyNumbers_ReturnsSum`` () =
 //    Assert.AreEqual(INVALID_INPUT + "Number of inputs exceeds 2", ex.Message)
 
 [<Test>]
-let ``testAdd_EmptyNumberBetweenCommas_ThrowsInvalidInputException`` () =
+let ``testAdd_ConsecutiveDelimiters_ThrowsInvalidInputException`` () =
     let ex = Assert.Throws<InvalidInputException>(fun () -> add "1,\n2" |> ignore)
     Assert.AreEqual(INVALID_INPUT + "Consecutive delimiters found", ex.Message)
 
@@ -41,3 +41,14 @@ let ``testAdd_NonNumericCharacter_ThrowsInvalidInputException`` () =
 [<Test>]
 let ``testAdd_NewLineDelimiter_ReturnsSum`` () =
     Assert.AreEqual(15, add "1\n2\n3\n4\n5")
+
+    
+[<Test>]
+let ``testAdd_CustomDelimiter_ReturnsSum`` () =
+    Assert.AreEqual(6, add "\\;\n1;2;3")
+
+[<Test>]
+let ``testAdd_ConsecutiveCustomDelimiters_ThrowsInvalidInputException`` () =
+    let ex = Assert.Throws<InvalidInputException>(fun () -> add "\\;\n1;;n2" |> ignore)
+    Assert.AreEqual(INVALID_INPUT + "Consecutive delimiters found", ex.Message)
+

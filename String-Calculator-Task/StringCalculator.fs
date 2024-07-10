@@ -17,7 +17,9 @@ module StringUtils =
 
     let addNumberStringToList (result: ResizeArray<int>) (sb: System.Text.StringBuilder) =
         if sb.Length > 0 then
-            result.Add(parseString (sb.ToString()))
+            let number = parseString (sb.ToString())
+            if number <= 1000 then
+                result.Add(number)
 
     let separateDelimitersAndInput (input: string) : Set<char> * string =
         if not (input.StartsWith("\\")) then

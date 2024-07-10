@@ -52,3 +52,7 @@ let ``testAdd_ConsecutiveCustomDelimiters_ThrowsInvalidInputException`` () =
     let ex = Assert.Throws<InvalidInputException>(fun () -> add "\\;\n1;;n2" |> ignore)
     Assert.AreEqual(INVALID_INPUT + "Consecutive delimiters found", ex.Message)
 
+[<Test>]
+let ``testAdd_NegativeNumbers_ThrowsException`` () =
+    let ex = Assert.Throws<InvalidInputException>(fun () -> add "1,-2,-5" |> ignore)
+    Assert.AreEqual(ErrorMessages.INVALID_INPUT + "Negatives not allowed: -2, -5", ex.Message)

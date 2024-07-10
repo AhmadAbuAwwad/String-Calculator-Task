@@ -32,11 +32,19 @@ module StringUtils =
                 |> set
             (delimiters, input.Substring(endOfDelimiters + 1))
 
+
+    let validateNegatives (result: ResizeArray<int>) =
+        let negativeNumbers = result |> Seq.filter (fun number -> number < 0) |> List.ofSeq
+        if negativeNumbers.Length > 0 then
+            let message = String.Join(", ", negativeNumbers)
+            raise (InvalidInputException(ErrorMessages.INVALID_INPUT + "Negatives not allowed: " + message))
+
+
     let splitString (input: string) (delimiters: Set<char>) =
         let result = ResizeArray<int>()
         let sb = System.Text.StringBuilder()
         let mutable lastWasDelimiter = false
-
+       
         for ch in input do
             if delimiters.Contains(ch) then
                 if lastWasDelimiter then
@@ -49,6 +57,7 @@ module StringUtils =
                 sb.Append(ch) |> ignore
 
         addNumberStringToList result sb
+        validateNegatives result
         result |> List.ofSeq
 
 // let validateInput (numArray: int list) =

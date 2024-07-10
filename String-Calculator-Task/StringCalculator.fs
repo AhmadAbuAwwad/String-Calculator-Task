@@ -45,17 +45,12 @@ module StringUtils =
     let splitString (input: string) (delimiters: Set<char>) =
         let result = ResizeArray<int>()
         let sb = System.Text.StringBuilder()
-        let mutable lastWasDelimiter = false
        
         for ch in input do
             if delimiters.Contains(ch) then
-                if lastWasDelimiter then
-                    raise (InvalidInputException(ErrorMessages.INVALID_INPUT + "Consecutive delimiters found"))
-                lastWasDelimiter <- true
                 addNumberStringToList result sb
                 sb.Clear() |> ignore
             else
-                lastWasDelimiter <- false
                 sb.Append(ch) |> ignore
 
         addNumberStringToList result sb

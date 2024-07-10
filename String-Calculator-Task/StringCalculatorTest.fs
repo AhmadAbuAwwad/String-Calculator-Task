@@ -28,10 +28,10 @@ let ``testAdd_ManyNumbers_ReturnsSum`` () =
 //    let ex = Assert.Throws<InvalidInputException>(fun () -> add "1,2,3" |> ignore)
 //    Assert.AreEqual(INVALID_INPUT + "Number of inputs exceeds 2", ex.Message)
 
-[<Test>]
-let ``testAdd_ConsecutiveDelimiters_ThrowsInvalidInputException`` () =
-    let ex = Assert.Throws<InvalidInputException>(fun () -> add "1,\n2" |> ignore)
-    Assert.AreEqual(INVALID_INPUT + "Consecutive delimiters found", ex.Message)
+//[<Test>]
+//let ``testAdd_ConsecutiveDelimiters_ThrowsInvalidInputException`` () =
+//    let ex = Assert.Throws<InvalidInputException>(fun () -> add "1,\n2" |> ignore)
+//    Assert.AreEqual(INVALID_INPUT + "Consecutive delimiters found", ex.Message)
 
 [<Test>]
 let ``testAdd_NonNumericCharacter_ThrowsInvalidInputException`` () =
@@ -47,10 +47,10 @@ let ``testAdd_NewLineDelimiter_ReturnsSum`` () =
 let ``testAdd_CustomDelimiter_ReturnsSum`` () =
     Assert.AreEqual(6, add "\\;\n1;2;3")
 
-[<Test>]
-let ``testAdd_ConsecutiveCustomDelimiters_ThrowsInvalidInputException`` () =
-    let ex = Assert.Throws<InvalidInputException>(fun () -> add "\\;\n1;;n2" |> ignore)
-    Assert.AreEqual(INVALID_INPUT + "Consecutive delimiters found", ex.Message)
+//[<Test>]
+//let ``testAdd_ConsecutiveCustomDelimiters_ThrowsInvalidInputException`` () =
+//    let ex = Assert.Throws<InvalidInputException>(fun () -> add "\\;\n1;;n2" |> ignore)
+//    Assert.AreEqual(INVALID_INPUT + "Consecutive delimiters found", ex.Message)
 
 [<Test>]
 let ``testAdd_NegativeNumbers_ThrowsException`` () =
@@ -60,3 +60,7 @@ let ``testAdd_NegativeNumbers_ThrowsException`` () =
 [<Test>]
 let ``testAdd_NumberOver1000_IgnoredInSum`` () =
     Assert.AreEqual(3, add "1,1001,2")
+
+[<Test>]
+let ``testAdd_ConsecutiveDelimiters_ReturnsSum`` () =
+    Assert.AreEqual(3, add "1,,,,,,,,,,,\n\n,2")

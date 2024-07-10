@@ -46,8 +46,7 @@ module StringUtils =
 let add (numbers: string) =
     if String.IsNullOrEmpty(numbers) then 0
     else
-        let delimiters = set [',';]
+        let delimiters = set [','; '\n']
         let numList = StringUtils.splitString numbers delimiters
 //        validateInput numList
         numList |> List.sum
-printfn "%d" (add "1,2,3")

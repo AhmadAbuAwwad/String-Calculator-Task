@@ -64,3 +64,12 @@ let ``testAdd_NumberOver1000_IgnoredInSum`` () =
 [<Test>]
 let ``testAdd_ConsecutiveDelimiters_ReturnsSum`` () =
     Assert.AreEqual(3, add "1,,,,,,,,,,,\n\n,2")
+
+[<Test>]
+let ``testAdd_MultipleDelimiters_ReturnsSum`` () =
+    Assert.AreEqual(3, add "\\[;][@][&]\n1;2")
+
+[<Test>]
+let ``testAdd_MultipleDelimitersWrongFormat_ThrowsException`` () =
+    let ex = Assert.Throws<InvalidInputException>(fun () -> add "\\[[;[[]]]][[@][&]\n1&2" |> ignore)
+    Assert.AreEqual(ErrorMessages.INVALID_INPUT + "Invalid delimiter format", ex.Message)

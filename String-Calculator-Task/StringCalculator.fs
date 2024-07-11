@@ -1,6 +1,8 @@
 module StringCalculator
 
 open System
+open System.Collections.Generic
+open System.Text
 
 type InvalidInputException(message: string) =
     inherit Exception(message)
@@ -21,19 +23,46 @@ module StringUtils =
             if number <= 1000 then
                 result.Add(number)
 
-    let separateDelimitersAndInput (input: string) : Set<char> * string =
+    let parseMultipleDelimiters (delimiterPart: string) (delimiters: ResizeArray<char>) =
+        let stack = Stack<char>()
+        let currentDelimiter = StringBuilder()
+        for ch in delimiterPart.ToCharArray() do
+            match ch with
+            | '[' ->
+                if stack.Count > 0 then
+                    raise (InvalidInputException(ErrorMessages.INVALID_INPUT + "Nested delimiters are not allowed"))
+                stack.Push(ch)
+            | ']' ->
+                if stack.Count = 0 || stack.Pop() <> '[' then
+                    raise (InvalidInputException(ErrorMessages.INVALID_INPUT + "Unmatched delimiter brackets"))
+                for d in currentDelimiter.ToString().ToCharArray() do
+                    delimiters.Add(d)
+                currentDelimiter.Clear() |> ignore
+            | _ ->
+                if not (stack.Count <= 0) then
+                    currentDelimiter.Append(ch) |> ignore
+
+    let separateDelimitersAndInput (input: string) =
         if not (input.StartsWith("\\")) then
             (set [','; '\n'], input)
         else
-            let endOfDelimiters = input.IndexOf('\n')
-            if endOfDelimiters = -1 then
-                raise (InvalidInputException(ErrorMessages.INVALID_INPUT + "Delimiter section not properly terminated"))
-            let delimiters = 
-                input.Substring(1, endOfDelimiters - 1)
-                |> Seq.map (fun c -> c)
-                |> set
-            (delimiters, input.Substring(endOfDelimiters + 1))
+            try
+                let endOfDelimiters = input.IndexOf('\n')
+                if endOfDelimiters = -1 then
+                    raise (InvalidInputException(ErrorMessages.INVALID_INPUT + "Delimiter section not properly terminated"))
 
+                let delimiterPart = input.Substring(1, endOfDelimiters - 1)
+                let input' = input.Substring(endOfDelimiters + 1)
+
+                if delimiterPart.Contains("[") then
+                    let delimiters = ResizeArray<char>()
+                    parseMultipleDelimiters delimiterPart delimiters
+                    (Set.ofList (delimiters |> List.ofSeq), input')
+                else
+                    (delimiterPart.ToCharArray() |> Seq.toList |> Set.ofList, input')
+             with
+            | :? System.Exception ->
+            raise (InvalidInputException("Invalid input: Invalid delimiter format"))
 
     let validateNegatives (result: ResizeArray<int>) =
         let negativeNumbers = result |> Seq.filter (fun number -> number < 0) |> List.ofSeq
